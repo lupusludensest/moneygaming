@@ -117,7 +117,7 @@ wait.until(EC.presence_of_element_located(USR_NM)).clear()
 wait.until(EC.presence_of_element_located(USR_NM)).send_keys('firstName')
 
 # 19. Send password
-pswrd = 'one1Two*'
+pswrd = 'one1Two^'
 ln_ch = 6
 dgts = "[1234567890]"
 spcs = "[!@#$%^&*()_]"
