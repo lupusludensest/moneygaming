@@ -33,8 +33,10 @@ SCRT_QSTN = (By.ID, "securityQuestionOne")
 ANSWR_T_SCRT_QSTN = (By.XPATH , "//input[@name='map(securityAnswerOne)']")
 SCRT_QSTN_TW = (By.XPATH, "//select[@name='map(securityQuestionTwo)']")
 ANSWR_T_SCRT_QSTN_TW = (By. XPATH, "//input[@name='map(securityAnswerTwo)']")
+# ANSWR_T_SCRT_QSTN_TW = (By.XPATH, "//option[@value='Where were you born?']")
 CRRNCY = (By.XPATH, "//select[@name='map(currency)']")
 CHCK_BX_EIGHTNYRS = (By.XPATH, "//input[@name='map(terms)']")
+DT_OF_BRTH_RQRD = (By.XPATH, "//label[@for='dob']")
 SBMT_BTN = (By.CSS_SELECTOR, "input#form.promoReg.green")
 LBL_AGE_HR = (By.XPATH, "(//label[@class='error'])[18]")
 
@@ -78,7 +80,7 @@ class MainPage(Page):
     def txt_hr(self,tx_hr):
         wait = WebDriverWait(self.driver, 10)
         expected_text = tx_hr
-        actual_text = wait.until(EC.visibility_of_element_located(LBL_AGE_HR)).text
+        actual_text = wait.until(EC.visibility_of_element_located(DT_OF_BRTH_RQRD)).text
         print(f'Actual text: "{actual_text}"')
         assert expected_text in actual_text
         print(f'Expected "{expected_text}", and got: "{actual_text}"\n')
@@ -162,27 +164,27 @@ class MainPage(Page):
     # End of the above code
 
     # Send password 'one1Two@'
-    def snd_pswd(self, pswrd):
+    def snd_pswd(self, pswrd, ln_ch, dgts, spcs):
+        d_ln_ch = int(ln_ch)
         wait = WebDriverWait(self.driver, 10)
-        psswrd_cntrl = pswrd
         flag = 0
         while True:
-            if (len(psswrd_cntrl) < 7):
+            if (len(pswrd) <= d_ln_ch):
                 flag = -1
                 break
-            elif not re.search("[a-z]", psswrd_cntrl):
+            elif not re.search("[a-z]", pswrd):
                 flag = -1
                 break
-            elif not re.search("[A-Z]", psswrd_cntrl):
+            elif not re.search("[A-Z]", pswrd):
                 flag = -1
                 break
-            elif not re.search("[0-9]", psswrd_cntrl):
+            elif not re.search(dgts, pswrd):
                 flag = -1
                 break
-            elif not re.search("[_@$]", psswrd_cntrl):
+            elif not re.search(spcs, pswrd):
                 flag = -1
                 break
-            elif re.search("\s", psswrd_cntrl):
+            elif re.search("\s", pswrd):
                 flag = -1
                 break
             else:
@@ -191,51 +193,46 @@ class MainPage(Page):
                 break
 
         if flag == -1:
-            print(f'Not a Valid Password", {psswrd_cntrl}, {len(psswrd_cntrl)}')
+            print(f'Not a Valid Password": {pswrd}, {len(pswrd)}')
         wait.until(EC.presence_of_element_located(PSWRD)).clear()
-        wait.until(EC.presence_of_element_located(PSWRD)).send_keys(psswrd_cntrl)
+        wait.until(EC.presence_of_element_located(PSWRD)).send_keys(pswrd)
    # End of the above code
 
    # Resend password 'one1Two@'
-    def rsnd_pswd(self, rsnd_pswd):
+    def rsnd_pswd(self, pswrd, ln_ch, dgts, spcs):
+        d_ln_ch = int(ln_ch)
         wait = WebDriverWait(self.driver, 10)
+        flag = 0
+        while True:
+            if (len(pswrd) <= d_ln_ch):
+                flag = -1
+                break
+            elif not re.search("[a-z]", pswrd):
+                flag = -1
+                break
+            elif not re.search("[A-Z]", pswrd):
+                flag = -1
+                break
+            elif not re.search(dgts, pswrd):
+                flag = -1
+                break
+            elif not re.search(spcs, pswrd):
+                flag = -1
+                break
+            elif re.search("\s", pswrd):
+                flag = -1
+                break
+            else:
+                flag = 0
+                print("Valid Password")
+                break
+
+        if flag == -1:
+            print(f'Not a Valid Password": {pswrd}, {len(pswrd)}')
         wait.until(EC.presence_of_element_located(RSND_PSWD)).clear()
-        wait.until(EC.presence_of_element_located(RSND_PSWD)).send_keys(rsnd_pswd)
+        wait.until(EC.presence_of_element_located(RSND_PSWD)).send_keys(pswrd)
     # End of the above code
 
-    # Fill all fields and choose options after entering password
-    def fll_evrthg_ftr_pswd(self):
-        wait = WebDriverWait(self.driver, 10)
-        # 21. Select sequrity question
-        wait.until(EC.presence_of_element_located(SCRT_QSTN)).click()
-        wait.until(EC.presence_of_element_located(SCRT_QSTN)).send_keys('What was your childhood nickname?')
-
-        # Send answer to security question
-        wait.until(EC.presence_of_element_located(ANSWR_T_SCRT_QSTN)).clear()
-        wait.until(EC.presence_of_element_located(ANSWR_T_SCRT_QSTN)).send_keys('Qui pro')
-
-        # Select security question two
-        wait.until(EC.presence_of_element_located(SCRT_QSTN_TW)).click()
-        wait.until(EC.presence_of_element_located(SCRT_QSTN_TW)).send_keys('Where were you born?')
-
-        # Send answer to security question two
-        wait.until(EC.presence_of_element_located(RSND_PSWD)).clear()
-        wait.until(EC.presence_of_element_located(RSND_PSWD)).send_keys('Qui pro')
-
-        # Send answer to security question two
-        wait.until(EC.presence_of_element_located(ANSWR_T_SCRT_QSTN_TW)).clear()
-        wait.until(EC.presence_of_element_located(ANSWR_T_SCRT_QSTN_TW)).send_keys('No one else')
-
-        # Select currency
-        wait.until(EC.presence_of_element_located(CRRNCY)).click()
-        wait.until(EC.presence_of_element_located(CRRNCY)).send_keys('Pounds Sterling')
-
-        # Click checkbox >18 years
-        wait.until(EC.presence_of_element_located(CHCK_BX_EIGHTNYRS)).click()
-
-        # Click Join Now button
-        wait.until(EC.presence_of_element_located(SBMT_BTN)).click()
-    # End of the above code
 
 
 

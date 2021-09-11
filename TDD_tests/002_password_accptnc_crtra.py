@@ -117,25 +117,28 @@ wait.until(EC.presence_of_element_located(USR_NM)).clear()
 wait.until(EC.presence_of_element_located(USR_NM)).send_keys('firstName')
 
 # 19. Send password
-psswrd_cntrl = 'one1Two@'
+pswrd = 'one1Two*'
+ln_ch = 6
+dgts = "[1234567890]"
+spcs = "[!@#$%^&*()_]"
 flag = 0
 while True:
-    if (len(psswrd_cntrl) < 7):
+    if (len(pswrd) <= ln_ch):
         flag = -1
         break
-    elif not re.search("[a-z]", psswrd_cntrl):
+    elif not re.search("[a-z]", pswrd):
         flag = -1
         break
-    elif not re.search("[A-Z]", psswrd_cntrl):
+    elif not re.search("[A-Z]", pswrd):
         flag = -1
         break
-    elif not re.search("[0-9]", psswrd_cntrl):
+    elif not re.search(dgts, pswrd):
         flag = -1
         break
-    elif not re.search("[_@$]", psswrd_cntrl):
+    elif not re.search(spcs, pswrd):
         flag = -1
         break
-    elif re.search("\s", psswrd_cntrl):
+    elif re.search("\s", pswrd):
         flag = -1
         break
     else:
@@ -144,14 +147,14 @@ while True:
         break
 
 if flag == -1:
-    print(f'Not a Valid Password", {psswrd_cntrl}, {len(psswrd_cntrl)}')
+    print(f'Not a Valid Password", {pswrd}, {len(pswrd)}')
 wait.until(EC.presence_of_element_located(PSWRD)).clear()
-wait.until(EC.presence_of_element_located(PSWRD)).send_keys(psswrd_cntrl)
+wait.until(EC.presence_of_element_located(PSWRD)).send_keys(pswrd)
 
 # 20. Resend password
 wait.until(EC.presence_of_element_located(RSND_PSWD)).clear()
-wait.until(EC.presence_of_element_located(RSND_PSWD)).send_keys(psswrd_cntrl)
-print(psswrd_cntrl, len(psswrd_cntrl))
+wait.until(EC.presence_of_element_located(RSND_PSWD)).send_keys(pswrd)
+print(pswrd, len(pswrd))
 
 # 21. Select sequrity question
 wait.until(EC.presence_of_element_located(SCRT_QSTN)).click()
@@ -162,31 +165,27 @@ wait.until(EC.presence_of_element_located(ANSWR_T_SCRT_QSTN)).clear()
 wait.until(EC.presence_of_element_located(ANSWR_T_SCRT_QSTN)).send_keys('Qui pro')
 
 # 23. Select security question two
-wait.until(EC.presence_of_element_located(SCRT_QSTN_TW)).click()
-wait.until(EC.presence_of_element_located(SCRT_QSTN_TW)).send_keys('Where were you born?')
+wait.until(EC.element_to_be_clickable(SCRT_QSTN_TW)).click()
+wait.until(EC.element_to_be_clickable(SCRT_QSTN_TW)).send_keys('Where were you born?')
 
 # 24. Send answer to security question two
-wait.until(EC.presence_of_element_located(RSND_PSWD)).clear()
-wait.until(EC.presence_of_element_located(RSND_PSWD)).send_keys('Qui pro')
-
-# 25. Send answer to security question two
 wait.until(EC.presence_of_element_located(ANSWR_T_SCRT_QSTN_TW)).clear()
 wait.until(EC.presence_of_element_located(ANSWR_T_SCRT_QSTN_TW)).send_keys('No one else')
 
-# 26. Select currency
+# 25. Select currency
 wait.until(EC.presence_of_element_located(CRRNCY)).click()
 wait.until(EC.presence_of_element_located(CRRNCY)).send_keys('Pounds Sterling')
 
-# 27. Click checkbox >18 years
+# 26. Click checkbox >18 years
 wait.until(EC.presence_of_element_located(CHCK_BX_EIGHTNYRS)).click()
 
-# 28. Click Join Now button
+# 27. Click Join Now button
 wait.until(EC.presence_of_element_located(SBMT_BTN)).click()
 
-# driver.close()
+driver.close()
 
 # Sleep to see what we have
-# sleep(4)
+sleep(4)
 
-# # Driver quit
-# driver.quit()
+# Driver quit
+driver.quit()

@@ -33,6 +33,7 @@ SCRT_QSTN_TW = (By.XPATH, "//select[@name='map(securityQuestionTwo)']")
 ANSWR_T_SCRT_QSTN_TW = (By. XPATH, "//input[@name='map(securityAnswerTwo)']")
 CRRNCY = (By.XPATH, "//select[@name='map(currency)']")
 CHCK_BX_EIGHTNYRS = (By.XPATH, "//input[@name='map(terms)']")
+DT_OF_BRTH_RQRD = (By.XPATH, "//label[@for='dob']")
 SBMT_BTN = (By.CSS_SELECTOR, "input#form.promoReg.green")
 LBL_AGE_HR = (By.XPATH, "(//label[@class='error'])[18]")
 
@@ -57,12 +58,15 @@ wait.until(EC.presence_of_element_located(FRST_NM)).send_keys('firstName')
 wait.until(EC.presence_of_element_located(SR_NM)).clear()
 wait.until(EC.presence_of_element_located(SR_NM)).send_keys('surName')
 
-# 6. Click Join Now button
+# 5. Click checkbox 18 years is a minimum CHCK_BX_EIGHTNYRS
+wait.until(EC.presence_of_element_located(CHCK_BX_EIGHTNYRS)).click()
+
+# 7. Click Join Now button
 wait.until(EC.presence_of_element_located(SBMT_BTN)).click()
 
-# 7. Verify text "This field is required" is here
+# 8. Verify text "This field is required" is here
 expected_text = "This field is required"
-actual_text = wait.until(EC.visibility_of_element_located(LBL_AGE_HR)).text
+actual_text = wait.until(EC.visibility_of_element_located(DT_OF_BRTH_RQRD)).text
 print(f'Actual text: "{actual_text}"')
 assert expected_text in actual_text
 print(f'Expected "{expected_text}", and got: "{actual_text}"\n')
